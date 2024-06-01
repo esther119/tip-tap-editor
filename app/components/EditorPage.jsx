@@ -2,11 +2,33 @@
 import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
-import { useCreateBlockNote } from "@blocknote/react";
+// import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/mantine/style.css";
 import { useEffect, useMemo, useState } from "react";
-import CodeBlock from "@tiptap/extension-code-block";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
+// import CodeBlock from "@tiptap/extension-code-block";
+// import HorizontalRule from "@tiptap/extension-horizontal-rule";
+
+const uploadImageToCloud = async (imageUrl) => {
+  try {
+    const response = await fetch("http://127.0.0.1:5000/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: imageUrl }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const secureURL = data.url;
+    return secureURL;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 async function uploadFile(file) {
   const body = new FormData();
@@ -21,6 +43,9 @@ async function uploadFile(file) {
     "tmpfiles.org/dl/"
   );
   console.log("Result URL:", resultUrl);
+  const secureURL = await uploadImageToCloud(resultUrl);
+  console.log("secureURL front end", secureURL);
+
   return resultUrl;
 }
 
@@ -36,7 +61,7 @@ async function loadFromStorage() {
   return storageString ? JSON.parse(storageString) : undefined;
 }
 
-export default function MyBlock() {
+export default function EditorPage() {
   const [initialContent, setInitialContent] = useState("loading");
 
   // Loads the previously stored editor contents.
@@ -84,6 +109,7 @@ export default function MyBlock() {
   return (
     <BlockNoteView
       editor={editor}
+      theme="light"
       onChange={() => {
         saveToStorage(editor.document);
       }}

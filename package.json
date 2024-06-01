@@ -12,6 +12,8 @@
     "@blocknote/core": "^0.13.4",
     "@blocknote/mantine": "^0.13.4",
     "@blocknote/react": "^0.13.4",
+    "@cloudinary/react": "^1.13.0",
+    "@cloudinary/url-gen": "^1.19.0",
     "@tiptap/extension-code-block": "^2.4.0",
     "@tiptap/extension-horizontal-rule": "^2.4.0",
     "@tiptap/pm": "^2.4.0",
